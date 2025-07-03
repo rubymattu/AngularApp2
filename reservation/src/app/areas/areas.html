@@ -1,0 +1,33 @@
+<div id="theList">
+  <h2>Raveena's Reservation List</h2>
+
+  <div *ngFor="let item of reservations; let i = index;" class="row mb-3 align-items-center">
+
+    <!-- Reservation Name -->
+    <div class="col-3">
+      {{ item.reservationName }}
+    </div>
+
+    <!-- Reservation Time -->
+    <div class="col-3">
+      {{ item.reservationTime }}
+    </div>
+
+    <!-- Booking Status -->
+    <div class="col-2">
+      <span [ngClass]="item.isBooked == 1 ? 'badge bg-success' : 'badge bg-secondary'">
+        {{ item.isBooked == 1 ? 'Booked' : 'Available' }}
+      </span>
+    </div>
+
+    <!-- Reservation Image -->
+    <div class="col-2">
+      <img
+        [src]="'http://localhost/angularapp2/reservationapi/uploads/' + item.reservationImage"
+        width="75"
+        height="75"
+        alt="{{item.reservationImage}}">
+    </div>
+
+  </div>
+</div>
