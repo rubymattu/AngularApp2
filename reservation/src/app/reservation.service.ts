@@ -14,4 +14,7 @@ export class ReservationService {
   getAll() {
     return this.http.get<Reservation[]>(`${this.baseUrl}/list`);
   }
+  edit(reservation: Reservation) {
+    return this.http.put<Reservation>(`${this.baseUrl}/edit`, reservation);
+  }
 }

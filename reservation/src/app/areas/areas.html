@@ -3,23 +3,6 @@
 
   <div *ngFor="let item of reservations; let i = index;" class="row mb-3 align-items-center">
 
-    <!-- Reservation Name -->
-    <div class="col-3">
-      {{ item.reservationName }}
-    </div>
-
-    <!-- Reservation Time -->
-    <div class="col-3">
-      {{ item.reservationTime }}
-    </div>
-
-    <!-- Booking Status -->
-    <div class="col-2">
-      <span [ngClass]="item.isBooked == 1 ? 'badge bg-success' : 'badge bg-secondary'">
-        {{ item.isBooked == 1 ? 'Booked' : 'Available' }}
-      </span>
-    </div>
-
     <!-- Reservation Image -->
     <div class="col-2">
       <img
@@ -27,6 +10,31 @@
         width="75"
         height="75"
         alt="{{item.reservationImage}}">
+    </div>
+
+    <!-- Reservation Name as input -->
+    <div class="col-3">
+      <input type="text" class="form-control" [(ngModel)]="item.reservationName" name="reservationName{{i}}">
+    </div>
+
+    <!-- Reservation Time as select -->
+    <div class="col-3">
+      <select class="form-select" [(ngModel)]="item.reservationTime" name="reservationTime{{i}}">
+        <option selected>{{item.reservationTime || 'Select Time'}}</option>
+      </select>
+    </div>
+
+    <!-- Booking Status as select -->
+    <div class="col-2">
+      <select class="form-select" [(ngModel)]="item.isBooked" name="isBooked{{i}}">
+        <option [value]="1">Booked</option>
+        <option [value]="0">Available</option>
+      </select>
+    </div>
+
+    <!-- Edit Button -->
+    <div class="col-1">
+      <button class="btn btn-primary" (click)="editReservation(item, i)">Edit</button>
     </div>
 
   </div>

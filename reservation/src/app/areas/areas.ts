@@ -55,6 +55,22 @@ export class AreasComponent implements OnInit {
     );
   }
 
+  editReservation(item: Reservation, index: number): void {
+    // Your logic here
+    console.log('Editing reservation:', item, 'at index:', index);
+    
+    // Example: you could toggle edit mode or send update request here
+    this.reservationService.edit(item).subscribe({
+      next: () => {
+        this.success = 'Reservation updated successfully';
+      },
+      error: (err) => {
+        console.error('Error updating reservation:', err);
+        this.error = 'Failed to update reservation';
+      }
+    });
+  }
+
   resetAlerts(): void {
     this.error = '';
     this.success = '';
