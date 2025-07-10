@@ -11,8 +11,12 @@
 }
 
 .row {
-  border-bottom: 1px solid #dee2e6;
   padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+.card > .row {
+  border-bottom: none;
 }
 
 img {

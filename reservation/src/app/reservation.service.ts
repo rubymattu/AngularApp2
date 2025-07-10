@@ -17,4 +17,7 @@ export class ReservationService {
   edit(reservation: Reservation) {
     return this.http.put<Reservation>(`${this.baseUrl}/edit`, reservation);
   }
+  add(formData: FormData) {
+  return this.http.post(`${this.baseUrl}/add.php`, formData);
+}
 }

@@ -1,5 +1,44 @@
 <div id="theList">
   <h2>Raveena's Reservation List</h2>
+  <div class="card mb-4 p-3">
+    <h5>Add New Reservation</h5>
+    <div class="row align-items-center">
+  
+    <!-- Reservation Image -->
+    <div class="col-2">
+      <input type="file" class="form-control" (change)="onFileSelected($event)">
+    </div>
+
+    <!-- Reservation Name -->
+    <div class="col-3">
+      <input type="text" class="form-control" placeholder="Reservation Name" [(ngModel)]="reservation.reservationName" name="newName">
+    </div>
+
+    <!-- Time -->
+    <div class="col-3">
+      <select class="form-select" [(ngModel)]="reservation.reservationTime" name="newTime">
+        <option value="" disabled selected>Select Time</option>
+        <option value="9 am - 12 noon">9 am - 12 noon</option>
+        <option value="12 noon - 3 pm">12 noon - 3 pm</option>
+        <option value="3 pm - 6 pm">3 pm - 6 pm</option>
+      </select>
+    </div>
+
+    <!-- Status -->
+    <div class="col-2">
+      <select class="form-select" [(ngModel)]="reservation.isBooked" name="newStatus">
+        <option [value]="0">Available</option>
+        <option [value]="1">Booked</option>
+      </select>
+    </div>
+
+    <!-- Add Button -->
+    <div class="col-2">
+      <button class="btn btn-success" (click)="addReservation()">Add New Reservation</button>
+    </div>
+  </div>
+</div>
+
 
   <div *ngFor="let item of reservations; let i = index;" class="row mb-3 align-items-center">
 
@@ -17,12 +56,19 @@
       <input type="text" class="form-control" [(ngModel)]="item.reservationName" name="reservationName{{i}}">
     </div>
 
-    <!-- Reservation Time as select -->
     <div class="col-3">
-      <select class="form-select" [(ngModel)]="item.reservationTime" name="reservationTime{{i}}">
-        <option selected>{{item.reservationTime || 'Select Time'}}</option>
-      </select>
+      <select class="form-select"
+        [(ngModel)]="item.reservationTime"
+        name="reservationTime{{i}}">
+  <option [value]="item.reservationTime" selected hidden>{{ item.reservationTime }}</option>
+  <option *ngFor="let time of timeSlots"
+          [value]="time"
+          [hidden]="time === item.reservationTime">
+    {{ time }}
+  </option>
+</select>
     </div>
+
 
     <!-- Booking Status as select -->
     <div class="col-2">
@@ -34,7 +80,7 @@
 
     <!-- Edit Button -->
     <div class="col-1">
-      <button class="btn btn-primary" (click)="editReservation(item, i)">Edit</button>
+      <button class="btn btn-primary" (click)="editReservation(item, i)">Update</button>
     </div>
 
   </div>
