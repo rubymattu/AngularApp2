@@ -31,9 +31,7 @@ select,
 input[type="file"] {
   margin-bottom: 1rem;
 }
-input[type="file"] {
-  width: 10%;
-}
+
 
 button {
   width: 100%;
@@ -55,3 +53,15 @@ button {
   object-fit: cover;
   border-radius: 10px;
 }
+img {
+  border: none !important;
+  box-shadow: none !important;
+}
+.btn-link {
+  color: #959595;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  border: 2px solid #959595;
+}
+

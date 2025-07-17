@@ -14,9 +14,10 @@ export class ReservationService {
   getAll() {
     return this.http.get<Reservation[]>(`${this.baseUrl}/list`);
   }
-  edit(reservation: Reservation) {
-    return this.http.put<Reservation>(`${this.baseUrl}/edit`, reservation);
-  }
+  edit(formData: FormData) {
+  return this.http.post<any>('http://localhost/angularapp2/reservationapi/edit', formData);
+}
+
   add(formData: FormData) {
   return this.http.post(`${this.baseUrl}/add.php`, formData);
 }
