@@ -1,85 +1,80 @@
 <?php
 require 'connect.php';
 
-// Function to upload image and return the new file name or false if fail
-function uploadImage($file) {
-    $targetDir = "uploads/";  // Your images folder
-    $fileName = basename($file["name"]);
-    $targetFilePath = $targetDir . uniqid() . "-" . $fileName; // Unique name to avoid conflicts
-    $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $reservationID     = $_POST['reservationID'] ?? '';
+    $reservationName   = $_POST['reservationName'] ?? '';
+    $reservationTime   = $_POST['reservationTime'] ?? '';
+    $isBooked          = $_POST['isBooked'] ?? 0;
+    $existingImage     = $_POST['existingImage'] ?? '';
+    $newImageName      = $existingImage; // default to old image
 
-    // Allow certain file formats
-    $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
-
-    if (in_array($fileType, $allowedTypes)) {
-        if (move_uploaded_file($file["tmp_name"], $targetFilePath)) {
-            return basename($targetFilePath);
-        }
+    // Validate inputs
+    if (!$reservationID || !$reservationName || !$reservationTime) {
+        http_response_code(400);
+        echo json_encode(['message' => 'Invalid input']);
+        exit;
     }
-    return false;
+
+if (isset($_FILES['reservationImage']) && $_FILES['reservationImage']['error'] === UPLOAD_ERR_OK) {
+    $fileTmpPath = $_FILES['reservationImage']['tmp_name'];
+    $fileName = $_FILES['reservationImage']['name'];
+    $uploadFileDir = './uploads/';
+    $dest_path = $uploadFileDir . $fileName;
+
+    // Prevent overwriting existing file with same name
+    $baseName = pathinfo($fileName, PATHINFO_FILENAME);
+    $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+    $counter = 1;
+    while (file_exists($dest_path)) {
+        $fileName = $baseName . '_' . $counter . '.' . $extension;
+        $dest_path = $uploadFileDir . $fileName;
+        $counter++;
+    }
+
+    if (move_uploaded_file($fileTmpPath, $dest_path)) {
+        $newImageName = $fileName;
+
+        // Delete old image if it's different and not placeholder
+        if ($existingImage && $existingImage !== 'placeholder.jpg' && $existingImage !== $newImageName) {
+            $oldImagePath = $uploadFileDir . $existingImage;
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Failed to move uploaded file.']);
+        exit;
+    }
 }
 
-// Check if form data was submitted (multipart/form-data)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Make sure required fields exist
-    if (!isset($_POST['reservationID']) || !isset($_POST['reservationName']) || !isset($_POST['reservationTime']) || !isset($_POST['isBooked'])) {
-        http_response_code(400);
-        echo json_encode(['message' => 'Missing required fields']);
-        exit();
-    }
 
-    $reservationID = intval($_POST['reservationID']);
-    $reservationName = mysqli_real_escape_string($con, $_POST['reservationName']);
-    $reservationTime = mysqli_real_escape_string($con, $_POST['reservationTime']);
-    $isBooked = intval($_POST['isBooked']);
-    $existingImage = isset($_POST['existingImage']) ? $_POST['existingImage'] : '';
+    // Escape other inputs
+    $reservationID = mysqli_real_escape_string($con, (int)$reservationID);
+    $reservationName = mysqli_real_escape_string($con, $reservationName);
+    $reservationTime = mysqli_real_escape_string($con, $reservationTime);
+    $isBooked = mysqli_real_escape_string($con, (int)$isBooked);
+    $newImageName = mysqli_real_escape_string($con, $newImageName);
 
-    $newImageName = $existingImage;  // Default to existing image if no new image uploaded
-
-    // Check if new image uploaded
-    if (isset($_FILES['reservationImage']) && $_FILES['reservationImage']['error'] == UPLOAD_ERR_OK) {
-        $uploadedImageName = uploadImage($_FILES['reservationImage']);
-        if ($uploadedImageName !== false) {
-            $newImageName = $uploadedImageName;
-        } else {
-            http_response_code(422);
-            echo json_encode(['message' => 'Image upload failed or invalid file type']);
-            exit();
-        }
-    }
-
-    // Update query including image
-    $sql = "UPDATE `reservations` SET 
-                `reservationName` = '$reservationName',
-                `reservationTime` = '$reservationTime',
-                `isBooked` = '$isBooked',
-                `reservationImage` = '$newImageName'
-            WHERE `reservationID` = '$reservationID'
+    // Update reservation in DB
+    $sql = "UPDATE reservations SET 
+                reservationName = '$reservationName', 
+                reservationTime = '$reservationTime', 
+                isBooked = '$isBooked',
+                reservationImage = '$newImageName'
+            WHERE reservationID = '$reservationID'
             LIMIT 1";
 
     if (mysqli_query($con, $sql)) {
-        // After successful update, check if old image is used by any row
-        if ($existingImage !== '' && $existingImage !== $newImageName) {
-            $checkSql = "SELECT COUNT(*) AS count FROM reservations WHERE reservationImage = '$existingImage'";
-            $result = mysqli_query($con, $checkSql);
-            $row = mysqli_fetch_assoc($result);
-            if ($row['count'] == 0) {
-                // Delete old image file
-                $oldImagePath = "uploads/" . $existingImage;
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
-            }
-        }
-
         http_response_code(200);
-        echo json_encode(['message' => 'Reservation updated successfully']);
+        echo json_encode(['message' => 'Reservation updated']);
     } else {
-        http_response_code(422);
-        echo json_encode(['message' => 'Database update failed']);
+        http_response_code(500);
+        echo json_encode(['message' => 'Update failed']);
     }
 } else {
     http_response_code(405);
-    echo json_encode(['message' => 'Invalid request method']);
+    echo json_encode(['message' => 'Method Not Allowed']);
 }
 ?>

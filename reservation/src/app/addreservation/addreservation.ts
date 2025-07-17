@@ -53,7 +53,7 @@ export class Addreservation {
     const formData = new FormData();
     formData.append('reservationName', this.reservation.reservationName);
     formData.append('reservationTime', this.reservation.reservationTime);
-    formData.append('isBooked', String(this.reservation.isBooked));
+    formData.append('isBooked', this.reservation.isBooked.toString());
     if (this.selectedImage) {
       formData.append('reservationImage', this.selectedImage);
     }
