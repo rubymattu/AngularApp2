@@ -1,0 +1,86 @@
+<div class="container mt-5">
+
+<div class="header-with-links d-flex align-items-center mb-4">
+
+    <div id="links" class="btn-group" role="group" aria-label="Navigation Links">
+      
+      <a 
+        class="btn btn-outline-primary" 
+        routerLink="/viewreservation"
+        [routerLinkActive]="'active'" 
+        [routerLinkActiveOptions]="{exact: true}">
+        View / Update Reservations
+      </a>
+
+      <!-- <a 
+        class="btn btn-outline-primary" 
+        routerLink="/updatereservation" >
+        Update Reservation
+      </a> -->
+
+      <a 
+        class="btn btn-outline-primary" 
+        routerLink="/addreservation" 
+        [routerLinkActive]="'active'" 
+        [routerLinkActiveOptions]="{exact: true}">
+        Add Reservation
+      </a>
+
+      <a 
+        class="btn btn-outline-primary" 
+        routerLink="/about">
+        About Us
+      </a>
+    </div>
+  </div>
+
+<div class=" mt-5">
+
+  <h2 class="mb-4">All Reservations</h2>
+
+ <div *ngIf="success" class="alert alert-success">
+    {{ success }}
+  </div>
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="reservations.length === 0" class="alert alert-info">
+    No reservations found.
+  </div>
+
+  <div *ngFor="let item of reservations; let i = index" class="reservation-row row align-items-center mb-3">
+
+    <div class="col-1">
+      <h5>{{ i + 1 }}.</h5>
+    </div>
+
+    <div class="col-2">
+      <img 
+        [src]="'http://localhost/angularapp2/reservationapi/uploads/' + item.reservationImage" 
+        alt="{{ item.reservationName }}" 
+        class="reservation-image"
+      />
+    </div>
+
+    <div class="col-3">
+      <div class="fw-bold">{{ item.reservationName }}</div>
+      <small class="text-muted">{{ item.reservationTime }}</small>
+    </div>
+
+    <div class="col-3">
+      <span [ngClass]="item.isBooked == 1 ? 'badge bg-danger' : 'badge bg-success'">
+        {{ item.isBooked == 1 ? 'Booked' : 'Available' }}
+      </span>
+    </div>
+
+    <div class="col-3">
+      <button class="btn btn-primary" (click)="editReservation(item)">Update</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+

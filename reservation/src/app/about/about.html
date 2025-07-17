@@ -1,0 +1,53 @@
+<div class="container mt-5">
+
+<div class="header-with-links d-flex align-items-center mb-4">
+
+    <div id="links" class="btn-group" role="group" aria-label="Navigation Links">
+      
+      <a 
+        class="btn btn-outline-primary" 
+        routerLink="/viewreservation">
+        View / Update Reservations
+      </a>
+
+      <!-- <a 
+        class="btn btn-outline-primary" 
+        routerLink="/updatereservation">
+        Update Reservation
+      </a> -->
+
+      <a 
+        class="btn btn-outline-primary" 
+        routerLink="/addreservation">
+        Add Reservation
+      </a>
+
+      <a 
+        class="btn btn-outline-primary" 
+        routerLink="/about"
+        [routerLinkActive]="'active'" 
+        [routerLinkActiveOptions]="{exact: true}">
+        About Us
+      </a>
+    </div>
+  </div>
+
+<div class=" mt-5">
+
+<h2>About Us</h2>
+  <p>
+    Welcome to our Reservation App! We are dedicated to providing a seamless experience for managing and booking reservations with ease.
+  </p>
+  <p>
+    Our goal is to simplify your reservation process through a clean, user-friendly interface and reliable service.
+  </p>
+  <h3>Our Team</h3>
+  <ul>
+    <li>Anna Houston – Lead Developer & UX Designer</li>
+    <li>John Doe – Backend Engineer</li>
+    <li>Jane Smith – Project Manager</li>
+  </ul>
+</div>
+
+
+

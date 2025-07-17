@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [CommonModule, HttpClientModule, RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css',
-  template: `<h1>Reservation App</h1>
-  <p>If you're seeing this, routing should be working.</p>
-  <router-outlet></router-outlet>
-`
+  styleUrls: ['./app.css'],
+  providers: []
 })
 export class App {
   protected title = 'reservation';
