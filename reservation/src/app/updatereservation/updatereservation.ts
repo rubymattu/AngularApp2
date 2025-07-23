@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
-
+import { ChangeDetectorRef } from '@angular/core';
+import { Reservation } from '../reservation';
+import { Auth } from '../services/auth';
 import { ReservationService } from '../reservation.service';
 
 @Component({
@@ -12,6 +14,7 @@ import { ReservationService } from '../reservation.service';
   imports: [HttpClientModule, CommonModule, FormsModule, RouterModule],
   templateUrl: './updatereservation.html',
   styleUrls: ['./updatereservation.css'],
+  providers: [ReservationService, Auth]
 })
 export class Updatereservation {
   reservation: any = {
@@ -27,19 +30,34 @@ export class Updatereservation {
     '12:00 noon - 3:00 pm',
     '3:00 pm - 6:00 pm'
   ];
+  reservationName = ['Rattlesnake Conservation Area',
+                     'Glen Haffy Conservation Area',
+                     'Heart Lake Conservation Area',
+                     'Mountsberg Conservation Area'
+  ];
 
   success: string = '';
   error: string = '';
   selectedFile: File | null = null;
   previewUrl: string | null = null;
+  userName: string = '';
 
-  constructor(private router: Router, private http: HttpClient, private reservationService: ReservationService) {
+  constructor(
+    private router: Router, 
+    private http: HttpClient, 
+    public authService: Auth,
+    private cdr: ChangeDetectorRef,
+    private reservationService: ReservationService) {
     const navigation = this.router.getCurrentNavigation();
     const data = navigation?.extras?.state?.['data'];
 
     if (data) {
       this.reservation = { ...data };
     }
+  }
+  ngOnInit() {
+    this.userName = localStorage.getItem('username') || 'Guest';
+    this.cdr.detectChanges();
   }
 
   editReservation() {

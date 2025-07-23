@@ -32,11 +32,16 @@
         About Us
       </a>
     </div>
+    
   </div>
 
 <div class=" mt-5">
 
-  <h2 class="mb-4">All Reservations</h2>
+  
+  <div class="toolbar">
+    <h2>{{ userName }}'s Reservation List</h2>
+    <button (click)="authService.logout()" class="btn btn-sm btn-danger">Logout</button>
+  </div>
 
  <div *ngIf="success" class="alert alert-success">
     {{ success }}

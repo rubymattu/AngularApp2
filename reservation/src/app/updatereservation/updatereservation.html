@@ -39,8 +39,11 @@
 
 <div class=" mt-5">
 
+  <div class="toolbar">
+    <h2>{{ userName }}'s Reservation List</h2>
+    <button (click)="authService.logout()" class="btn btn-sm btn-danger">Logout</button>
+  </div>
   <h2 class="mb-4">Update Reservation</h2>
-
   <!-- Success / Error Messages -->
   <div *ngIf="success" class="alert alert-success">
     {{ success }}

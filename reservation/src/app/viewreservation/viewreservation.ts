@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ChangeDetectorRef } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
-
 import { ReservationService } from '../reservation.service';
+import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-viewreservation',
@@ -17,14 +18,20 @@ export class Viewreservation implements OnInit {
   reservations: any[] = [];
   error = '';
   success = '';
+  userName: string = '';
 
   constructor(
     private reservationService: ReservationService,
-    private router: Router
+    private router: Router,
+    public authService: Auth,
+    private cdr: ChangeDetectorRef,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
     this.loadReservations();
+    this.cdr.detectChanges(); // Ensure UI is updated after data fetch
+    this.userName = localStorage.getItem('username') || 'Guest';
   }
 
   loadReservations(): void {

@@ -33,6 +33,10 @@
   </div>
 
 <div class=" mt-5">
+  <div class="toolbar">
+    <h2>{{ userName }}'s Reservation List</h2>
+    <button (click)="authService.logout()" class="btn btn-sm btn-danger">Logout</button>
+  </div>
 
   <h2 class="mb-4">Add New Reservation</h2>
 
@@ -51,15 +55,18 @@
   </div>
 
   <div class="mb-3">
-    <label for="reservationName" class="form-label">Reservation Name</label>
-    <input
-      type="text"
+    <label for="reservationName">Reservation Name:</label>
+    <select
       id="reservationName"
       class="form-control"
-      placeholder="Enter reservation name"
-      [(ngModel)]="reservation.reservationName"
       name="reservationName"
-    >
+      [(ngModel)]="reservation.reservationName"
+      required>
+      <option value="" disabled selected>Select a reservation</option>
+      <option *ngFor="let name of reservationName" [value]="name">
+        {{ name }}
+      </option>
+    </select>
   </div>
 
   <div class="mb-3">

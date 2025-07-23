@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import {  RouterModule } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import { Reservation } from '../reservation';
+import { Auth } from '../services/auth';
 import { ReservationService } from '../reservation.service';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -14,7 +15,8 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [CommonModule, FormsModule, HttpClientModule, RouterModule],
   // providers: [ReservationService],
   templateUrl: './addreservation.html',
-  styleUrls: ['./addreservation.css']
+  styleUrls: ['./addreservation.css'],
+  providers: [ReservationService, Auth]
 })
 export class Addreservation {
   reservation: Reservation = {
@@ -28,14 +30,29 @@ export class Addreservation {
   selectedImage: File | null = null;
   success = '';
   error = '';
+  userName: string = '';
 
   timeSlots = [
     '9:00 am - 12:00 noon',
     '12:00 noon - 3:00 pm',
     '3:00 pm - 6:00 pm'
   ];
+  reservationName = ['Rattlesnake Conservation Area',
+                     'Glen Haffy Conservation Area',
+                     'Heart Lake Conservation Area',
+                     'Mountsberg Conservation Area'
+  ];
 
-  constructor(private reservationService: ReservationService, private router: Router) {}
+  constructor(
+    private reservationService: ReservationService, 
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    public authService: Auth) {}
+
+  ngOnInit() {
+    this.userName = localStorage.getItem('username') || 'Guest';
+    this.cdr.detectChanges();
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
