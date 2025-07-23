@@ -1,6 +1,8 @@
 <div class="form-container">
-  <h2>Register</h2>
-  <button class="btn btn-outline-primary" routerLink="/login">Login</button>
+  <div class="form-header">
+    <h2>Register</h2>
+    <button class="btn btn-outline-primary" routerLink="/login">Login</button>
+  </div>
   <form (ngSubmit)="register()">
     <input type="text" [(ngModel)]="userName" name="username" placeholder="Username" required />
     <input type="email" [(ngModel)]="emailAddress" name="emailAddress" placeholder="Email" required />

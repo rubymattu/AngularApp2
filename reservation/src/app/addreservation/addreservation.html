@@ -55,18 +55,15 @@
   </div>
 
   <div class="mb-3">
-    <label for="reservationName">Reservation Name:</label>
-    <select
+    <label for="reservationName" class="form-label">Reservation Name</label>
+    <input
+      type="text"
       id="reservationName"
       class="form-control"
-      name="reservationName"
+      placeholder="Enter reservation name"
       [(ngModel)]="reservation.reservationName"
-      required>
-      <option value="" disabled selected>Select a reservation</option>
-      <option *ngFor="let name of reservationName" [value]="name">
-        {{ name }}
-      </option>
-    </select>
+      name="reservationName"
+    >
   </div>
 
   <div class="mb-3">
