@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import {  RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import { Reservation } from '../reservation';
 import { Auth } from '../services/auth';
@@ -13,7 +13,6 @@ import { HttpClientModule } from '@angular/common/http';
   selector: 'app-addreservation',
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule, RouterModule],
-  // providers: [ReservationService],
   templateUrl: './addreservation.html',
   styleUrls: ['./addreservation.css'],
   providers: [ReservationService, Auth]
@@ -37,10 +36,12 @@ export class Addreservation {
     '12:00 noon - 3:00 pm',
     '3:00 pm - 6:00 pm'
   ];
-  reservationName = ['Rattlesnake Conservation Area',
-                     'Glen Haffy Conservation Area',
-                     'Heart Lake Conservation Area',
-                     'Mountsberg Conservation Area'
+  
+  reservationName = [
+    'Rattlesnake Conservation Area',
+    'Glen Haffy Conservation Area',
+    'Heart Lake Conservation Area',
+    'Mountsberg Conservation Area'
   ];
 
   constructor(
@@ -71,6 +72,7 @@ export class Addreservation {
     formData.append('reservationName', this.reservation.reservationName);
     formData.append('reservationTime', this.reservation.reservationTime);
     formData.append('isBooked', this.reservation.isBooked.toString());
+    
     if (this.selectedImage) {
       formData.append('reservationImage', this.selectedImage);
     }
@@ -78,11 +80,15 @@ export class Addreservation {
     this.reservationService.add(formData).subscribe({
       next: () => {
         this.success = 'Reservation added successfully';
-        this.router.navigate(['/']); // Navigate back to list
+        this.router.navigate(['/']);
       },
       error: (err) => {
         console.error('Add failed:', err);
-        this.error = 'Failed to add reservation';
+        if (err.status === 409) {
+          this.error = 'This reservation already exists.';
+        } else {
+          this.error = 'Failed to add reservation';
+        }
       }
     });
   }

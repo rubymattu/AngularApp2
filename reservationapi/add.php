@@ -13,6 +13,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
+    // Check for duplicate reservation
+    $checkQuery = "SELECT * FROM `reservations` WHERE `reservationName` = ? AND `reservationTime` = ?";
+    $stmt = mysqli_prepare($con, $checkQuery);
+    mysqli_stmt_bind_param($stmt, 'ss', $reservationName, $reservationTime);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (mysqli_num_rows($result) > 0) {
+        http_response_code(409); // Conflict
+        echo json_encode(['message' => 'Duplicate reservation']);
+        exit();
+    }
+
     $reservationImage = 'placeholder.jpg'; // default
 
     // Handle image upload if exists
