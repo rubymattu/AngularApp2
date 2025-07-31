@@ -51,7 +51,11 @@
   <!-- Form Fields -->
   <div class="mb-3">
     <label for="reservationImage" class="form-label">Reservation Image</label>
-    <input type="file" id="reservationImage" class="form-control" (change)="onFileSelected($event)">
+    <input type="file" 
+    id="reservationImage" 
+    class="form-control" 
+    (change)="onFileSelected($event)"
+    accept="image/*">
   </div>
 
   <div class="mb-3">
@@ -63,7 +67,8 @@
       placeholder="Enter reservation name"
       [(ngModel)]="reservation.reservationName"
       name="reservationName"
-    >
+      maxlength="50"
+      required>
   </div>
 
   <div class="mb-3">

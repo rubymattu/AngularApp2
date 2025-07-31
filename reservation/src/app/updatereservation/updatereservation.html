@@ -94,7 +94,8 @@
   <div class="mb-3">
     <label for="reservationName" class="form-label">Reservation Name</label>
     <input type="text" id="reservationName" class="form-control"
-           [(ngModel)]="reservation.reservationName" name="reservationName">
+           [(ngModel)]="reservation.reservationName" name="reservationName"
+           maxlength="50" required>
   </div>
 
   <div class="mb-3">
